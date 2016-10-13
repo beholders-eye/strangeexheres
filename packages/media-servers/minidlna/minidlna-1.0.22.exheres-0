@@ -1,0 +1,8 @@
+# Copyright 2016 Ridai Govinda Pombo <ridai.govinda@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
+
+require github [ user=azatoth suffix=tar.gz ]
+
+SUMMARY="A complete solution to record, convert and stream audio and video"
+DESCRIPTION="MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully compliant with DLNA/UPnP-AV clients."
+HOMEPAGE="https://github.com/azatoth/${PN}/"

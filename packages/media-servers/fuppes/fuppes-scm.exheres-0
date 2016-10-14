@@ -2,5 +2,83 @@
 # Distributed under the terms of the GNU General Public License v2
 
 SCM_REPOSITORY="https://github.com/uvoelkel/fuppes"
+SCM_BRANCH="dev"
 
-require git-scm
+require scm-git
+
+SUMMARY="Fuppes is a free UPnP AV DLNA Media Server"
+HOMEPAGE="http://fuppes.ulrich-voelkel.de/"
+
+DOWNLOADS=""
+
+PLATFORMS="~amd64 ~arm ~armv7 ~x86"
+SLOT="0"
+LICENCES="GPL-2"
+
+DEFAULT_SRC_PREPARE_PATCHES=(
+    "${FILES}"/fuppes_log_unsigned_int_size_t_remove.patch
+)
+
+MYOPTIONS="
+    taglib              [[ description = [ Enable tag reading capabilities ] ]] 
+    ffmpegthumbnailer   [[ description = [ Enable media thumbnails generation ] ]] 
+    magickwand          [[ description = [ Enable ImageMagick magickwand transcoding plugin ] ]]
+    exiv2               [[ description = [ Enable Exiv2 transcoding plugin ] ]]
+    mp4v2               [[ description = [ Enable mp4v2 transcoding plugin ] ]]
+    lame                [[ description = [ Enable lame mp3 audio transconding plugin ] ]]
+    vorbis              [[ description = [ Enable vorbis audio transconding plugin ] ]]
+    musepack            [[ description = [ Enable musepack high quality audio transconding plugin ] ]]
+    flac                [[ description = [ Enable FLAC high quality audio transconding plugin ] ]]
+    mad                 [[ description = [ Enable Mad audio support ] ]]
+    faad                [[ description = [ Enable Faad MP4 decoder support ] ]]
+    opus                [[ description = [ Enable Opus codec support ] ]]
+"
+
+DEPENDENCIES="
+    build:
+        virtual/pkg-config
+        sys-devel/m4
+    build+run:
+        dev-libs/pcre[>=5.0]
+        dev-libs/libev
+        dev-libs/libxml2[>=2.7.0]
+        media/libav
+        dev-db/sqlite:3
+        net-misc/curl
+        taglib? ( media-libs/taglib )
+        ffmpegthumbnailer? ( media-video/ffmpegthumbnailer )
+        magickwand? ( media-gfx/ImageMagick )
+        exiv2? ( graphics/exiv2 )
+        mp4v2? ( media-libs/mp4v2 )
+        lame? ( media-sound/lame )
+        vorbis? ( media-libs/libvorbis )
+        musepack? ( media-libs/musepack )
+        flac? ( media-libs/flac )
+        mad? ( media-libs/libmad[>=0.15] )
+        faad? ( media-libs/faad2 )
+        opus? ( media-libs/opus[>=0.9.14] )
+"
+
+src_prepare() {
+    edo autoreconf -vfi
+
+    # Issue #3 https://github.com/uvoelkel/fuppes/issues/3
+    expatch "${DEFAULT_SRC_PREPARE_PATCHES[@]}"
+}
+
+src_configure() {
+
+    econf \
+        $(option_enable taglib) \
+        $(option_enable ffmpegthumbnailer) \
+        $(option_enable magickwand) \
+        $(option_enable exiv2) \
+        $(option_enable mp4v2) \
+        $(option_enable lame) \
+        $(option_enable vorbis) \
+        $(option_enable musepack) \
+        $(option_enable flac) \
+        $(option_enable mad) \
+        $(option_enable faad) \
+        $(option_enable opus)
+}

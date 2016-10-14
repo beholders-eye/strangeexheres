@@ -1,0 +1,31 @@
+diff --git a/src/lib/Log/Log.h b/src/lib/Log/Log.h
+index 52190d3..0451869 100644
+--- a/src/lib/Log/Log.h
++++ b/src/lib/Log/Log.h
+@@ -106,14 +106,6 @@ namespace Log
+ 				return *this;
+ 			}
+ 
+-			inline Log& operator <<(size_t s)
+-			{
+-				LOGNULL
+-				LOGACTIVE
+-				m_logger->log(s);
+-				return *this;
+-			}
+-
+ 			static inline const std::string printf(const std::string format, ...)
+ 			{
+ 				va_list args;
+diff --git a/src/lib/Log/Logger.h b/src/lib/Log/Logger.h
+index 5ba8801..7fd81e5 100644
+--- a/src/lib/Log/Logger.h
++++ b/src/lib/Log/Logger.h
+@@ -51,7 +51,6 @@ namespace Log
+             void log(int i) { m_stream << i << " "; }
+             void log(unsigned int i) { m_stream << i << " "; }
+             void log(fuppes_off_t o) { m_stream << o << " "; }
+-            void log(size_t s) { m_stream << s << " "; }
+ 
+         protected:
+             virtual void normalizedLog(const std::string log) = 0;
